@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Pettigrew Lab</title>
 
+  <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;700&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
 
   <style>
@@ -38,7 +39,17 @@
 
     .subtitle {
       opacity: 0.7;
-      margin-bottom: 30px;
+      margin-bottom: 20px;
+    }
+
+    img.hero {
+      width: 100%;
+      max-width: 800px;
+      border-radius: 16px;
+      margin: 20px auto 30px;
+      display: block;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+      animation: fadeIn 1.2s ease;
     }
 
     .terminal {
@@ -106,6 +117,7 @@
     .status {
       font-size: 0.9rem;
       opacity: 0.7;
+      margin-top: 6px;
     }
 
     footer {
@@ -122,7 +134,10 @@
     <h1>Pettigrew Lab</h1>
     <div class="subtitle">Building. Learning. Shipping.</div>
 
-    <!-- Terminal moved up -->
+    <!-- Image -->
+    <img src="Kid_coders.png" alt="Pettigrew Lab" class="hero">
+
+    <!-- Terminal -->
     <div class="terminal">
       > booting pettigrewlab...<br>
       > loading experiments...<br>
@@ -130,29 +145,42 @@
       > ready<span class="cursor"></span>
     </div>
 
+    <!-- About -->
     <div class="about">
-      We build working products as a family—so we can experiment, learn, and occasionally break things.
+      We build working products as a family... so we can experiment, learn, and occasionally break things.
     </div>
 
-    <!-- Project Cards -->
+    <!-- Projects -->
     <div class="cards">
       
       <div class="card">
         <h3>🚜 LawnMowIT</h3>
         <div>Simple scheduling and customer management for lawn care.</div>
-        <div class="status">Status: 🟢 Building</div>
+        <div class="status">Status: 🟡 Testing</div>
       </div>
 
       <div class="card">
         <h3>🚗 Driver360Feedback</h3>
         <div>Community-driven feedback on driving behavior.</div>
-        <div class="status">Status: 🟡 Experimenting</div>
+        <div class="status">Status: ⏸️ Paused</div>
+      </div>
+
+      <div class="card">
+        <h3>🏠 House Maintenance Tracker</h3>
+        <div>Track home upkeep, recurring tasks, and long-term maintenance.</div>
+        <div class="status">Status: 🧠  Ideation</div>
+      </div>
+
+      <div class="card">
+        <h3>Simplified Tutor</h3>
+        <div>NotebookLM-powered assistant that finds sources, organizes them, and builds structured learning plans.</div>
+        <div class="status">Status: 🧠 Ideation</div>
       </div>
 
     </div>
 
     <footer>
-      Built by Joel & Cassandra
+      Built by Joel, Cassandra, & Monsters
     </footer>
 
   </div>
