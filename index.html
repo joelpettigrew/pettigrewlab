@@ -25,7 +25,7 @@
     }
 
     .container {
-      max-width: 900px;
+      max-width: 1000px;
       margin: auto;
       padding: 60px 20px;
       text-align: center;
@@ -49,7 +49,6 @@
       margin: 20px auto 30px;
       display: block;
       box-shadow: 0 20px 40px rgba(0,0,0,0.4);
-      animation: fadeIn 1.2s ease;
     }
 
     .terminal {
@@ -62,32 +61,27 @@
       text-align: left;
       color: #22c55e;
       max-width: 700px;
-      animation: fadeIn 1.2s ease;
-    }
-
-    .cursor {
-      display: inline-block;
-      width: 8px;
-      height: 16px;
-      background: #22c55e;
-      margin-left: 4px;
-      animation: blink 1s infinite;
-    }
-
-    @keyframes blink {
-      0%, 50%, 100% { opacity: 1; }
-      25%, 75% { opacity: 0; }
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
     }
 
     .about {
       font-size: 1.1rem;
       opacity: 0.8;
       margin-bottom: 40px;
+    }
+
+    .featured {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+      align-items: center;
+      margin-bottom: 50px;
+      text-align: left;
+    }
+
+    .featured img {
+      width: 100%;
+      border-radius: 16px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.4);
     }
 
     .cards {
@@ -102,16 +96,51 @@
       padding: 20px;
       border-radius: 16px;
       text-align: left;
-      transition: transform 0.25s ease, background 0.25s ease;
+      transition: all 0.25s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Glow layer */
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: 16px;
+      background: radial-gradient(circle at top left, rgba(34,197,94,0.15), transparent 60%);
+      opacity: 0;
+      transition: opacity 0.25s ease;
+    }
+
+    /* Arrow indicator */
+    .card::after {
+      content: "→";
+      position: absolute;
+      right: 16px;
+      bottom: 16px;
+      opacity: 0.3;
+      transition: transform 0.2s ease, opacity 0.2s ease;
     }
 
     .card:hover {
-      transform: translateY(-5px);
+      transform: translateY(-6px) scale(1.01);
       background: rgba(255,255,255,0.08);
+      border-color: rgba(34,197,94,0.4);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.4);
     }
 
-    .card h3 {
-      margin: 0 0 8px 0;
+    .card:hover::before {
+      opacity: 1;
+    }
+
+    .card:hover::after {
+      transform: translateX(4px);
+      opacity: 0.8;
+    }
+
+    .card:active {
+      transform: scale(0.98);
     }
 
     .status {
@@ -120,10 +149,21 @@
       margin-top: 6px;
     }
 
+    a {
+      color: #22c55e;
+      text-decoration: none;
+    }
+
     footer {
       margin-top: 60px;
       opacity: 0.5;
       font-size: 0.9rem;
+    }
+
+    @media (max-width: 768px) {
+      .featured {
+        grid-template-columns: 1fr;
+      }
     }
   </style>
 </head>
@@ -132,31 +172,45 @@
   <div class="container">
     
     <h1>Pettigrew Lab</h1>
-    <div class="subtitle">Building. Learning. Shipping.</div>
+    <div class="subtitle">Building real products. Learning by shipping.</div>
 
-    <!-- Image -->
     <img src="Kid_coders.png" alt="Pettigrew Lab" class="hero">
 
-    <!-- Terminal -->
     <div class="terminal">
       > booting pettigrewlab...<br>
       > loading experiments...<br>
       > initializing projects...<br>
-      > ready<span class="cursor"></span>
+      > ready_
     </div>
 
-    <!-- About -->
     <div class="about">
-      We build working products as a family... so we can experiment, learn, and occasionally break things.
+      We build working products as a family — experimenting, learning, and shipping real things into the world.
     </div>
 
-    <!-- Projects -->
+    <!-- FEATURED -->
+    <div class="featured">
+      <div>
+        <h2>🚜 LawnMowIT</h2>
+        <p>The Modern OS for Lawn Care Pros. Scheduling, invoicing, routing, and customer management in one place.</p>
+        <p><a href="https://lawnmowit.com" target="_blank">Visit lawnmowit.com →</a></p>
+        <div class="status">Status: 🟢 Live Beta</div>
+      </div>
+      <img src="lawnmowit-hero.png" alt="LawnMowIT">
+    </div>
+
+    <!-- PROJECTS -->
     <div class="cards">
       
-      <div class="card">
+      <div class="card" onclick="window.open('https://lawnmowit.com', '_blank')">
         <h3>🚜 LawnMowIT</h3>
-        <div>Simple scheduling and customer management for lawn care.</div>
-        <div class="status">Status: 🟡 Testing</div>
+        <div>The Modern OS for Lawn Care Pros.</div>
+        <div class="status">Status: 🟢 Live Beta</div>
+      </div>
+
+      <div class="card">
+        <h3>📚 StudyQuest360</h3>
+        <div>Turn homework into a game with learning plans and concept-based progress.</div>
+        <div class="status">Status: 🟡 In Development</div>
       </div>
 
       <div class="card">
@@ -166,15 +220,27 @@
       </div>
 
       <div class="card">
-        <h3>🏠 House Maintenance Tracker</h3>
-        <div>Track home upkeep, recurring tasks, and long-term maintenance.</div>
-        <div class="status">Status: 🧠  Ideation</div>
+        <h3>💊 Medicine Manager</h3>
+        <div>Track prescriptions, refills, and medication schedules.</div>
+        <div class="status">Status: ⚪ Exploration</div>
       </div>
 
       <div class="card">
-        <h3>Simplified Tutor</h3>
-        <div>NotebookLM-powered assistant that finds sources, organizes them, and builds structured learning plans.</div>
-        <div class="status">Status: 🧠 Ideation</div>
+        <h3>👷 Teen Job Finder</h3>
+        <div>Helping teenagers find local jobs and build experience.</div>
+        <div class="status">Status: ⚪ Exploration</div>
+      </div>
+
+      <div class="card">
+        <h3>🧬 HealthOS</h3>
+        <div>Unified health insights from wearables, fitness, and lifestyle data.</div>
+        <div class="status">Status: ⚪ Exploration</div>
+      </div>
+
+      <div class="card">
+        <h3>📈 Allowance Investor</h3>
+        <div>A kid-friendly investing platform to learn and grow money.</div>
+        <div class="status">Status: ⚪ Exploration</div>
       </div>
 
     </div>
