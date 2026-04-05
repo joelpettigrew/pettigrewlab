@@ -56,7 +56,7 @@ const PROJECTS: Project[] = [
     icon: <Tractor className="w-6 h-6" />,
     url: 'https://lawnmowit.com',
     color: 'emerald',
-    image: '/src/lawnmowit-hero.png'
+    image: '/lawnmowit-hero.png'
   },
   {
     id: 'studyquest',
@@ -200,8 +200,8 @@ const STORIES = [
     "> arguing over cheating kids",
     "> frustration levels: HIGH",
     "> everyone annoyed",
-    "> Eli smiles...",
-    "> he knows what he did",
+    "> a monster smiles...",
+    "> they know what they did",
     "> victory? questionable",
     "> realize it's 11 PM",
     "> past bedtime",
@@ -733,7 +733,7 @@ export default function App() {
             className="relative rounded-2xl overflow-hidden glass p-3"
           >
             <img 
-              src="/src/Kid_coders.png" 
+              src="/Kid_coders.png" 
               alt="Pettigrew Lab Team" 
               className="w-full h-auto md:max-h-[600px] object-contain rounded-xl opacity-90"
               referrerPolicy="no-referrer"
