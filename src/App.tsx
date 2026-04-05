@@ -229,6 +229,58 @@ const STORIES = [
     "> no time for labs today",
     "> saving family memories",
     "> offline"
+  ],
+  [
+    "> booting pettigrewlab...",
+    "> loading sports_tracker...",
+    "> checking Miami Dolphins score...",
+    "> sadness detected",
+    "> they aren't good anymore",
+    "> switching to Utah Jazz...",
+    "> scanning roster...",
+    "> oh no, they are tanking",
+    "> this is rough",
+    "> checking BYU score...",
+    "> wait...",
+    "> BYU is actually GOOD?",
+    "> unexpected success detected",
+    "> mood: CONFUSED BUT HAPPY",
+    "> turning off computer",
+    "> offline"
+  ],
+  [
+    "> booting pettigrewlab...",
+    "> loading social_media_module...",
+    "> facebook doom scrolling: ACTIVE",
+    "> seeing a reel...",
+    "> getting distracted...",
+    "> thinking about posting it...",
+    "> wait...",
+    "> checking for likes? [ABORT]",
+    "> man, that is unhealthy",
+    "> how do you introduce kids to this?",
+    "> research: like button history",
+    "> created in just 2010?",
+    "> mind blown",
+    "> closing browser",
+    "> digital detox: ENABLED",
+    "> offline"
+  ],
+  [
+    "> booting pettigrewlab...",
+    "> loading ping_pong_simulator...",
+    "> challenge accepted: KIDS vs DAD",
+    "> serving...",
+    "> getting worked by both kids",
+    "> skill level: MASTER MONSTERS",
+    "> almost winning...",
+    "> comeback detected",
+    "> defeat is imminent",
+    "> kids win again",
+    "> dad pride: 100%",
+    "> dad skill: 0%",
+    "> putting away paddles",
+    "> offline"
   ]
 ];
 
@@ -269,92 +321,33 @@ const MatrixTerminal = () => {
   }, [lineIdx, currentStoryIdx]);
 
   return (
-    <div className="fixed left-0 top-0 bottom-0 w-48 lg:w-64 bg-slate-950/40 backdrop-blur-md border-r border-white/5 p-4 font-mono text-xs text-emerald-500/40 overflow-hidden hidden xl:block z-40 pointer-events-none">
-      <div className="flex gap-1 mb-4 opacity-30">
-        <div className="w-1.5 h-1.5 rounded-full bg-red-500" />
-        <div className="w-1.5 h-1.5 rounded-full bg-amber-500" />
-        <div className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+    <div className="fixed left-0 top-16 bottom-0 w-48 lg:w-64 bg-slate-950/90 backdrop-blur-md border-r border-white/10 p-6 font-mono text-xs text-emerald-400 overflow-hidden hidden xl:block z-40 shadow-2xl shadow-emerald-500/5">
+      <div className="flex gap-1.5 mb-6 opacity-50">
+        <div className="w-2 h-2 rounded-full bg-red-500/40" />
+        <div className="w-2 h-2 rounded-full bg-amber-500/40" />
+        <div className="w-2 h-2 rounded-full bg-emerald-500/40" />
       </div>
-      <div className="space-y-1.5">
+      <div className="space-y-2">
         {visibleLines.map((line, i) => (
           <motion.div
             key={`${currentStoryIdx}-${i}`}
             initial={{ opacity: 0, x: -5 }}
             animate={{ opacity: 1, x: 0 }}
-            className="break-words"
+            className="break-words leading-relaxed"
           >
             {line}
           </motion.div>
         ))}
-        <div className="flex items-center">
-          <span className="mr-1">{">"}</span>
-          <span className={`${cursorVisible ? 'opacity-100' : 'opacity-0'} w-1.5 h-3 bg-emerald-500/40`} />
+        <div className="flex items-center pt-1">
+          <span className="mr-1 text-emerald-400">{">"}</span>
+          <span className={`${cursorVisible ? 'opacity-100' : 'opacity-0'} w-1.5 h-3.5 bg-emerald-500/80`} />
         </div>
       </div>
     </div>
   );
 };
 
-const Terminal = () => {
-  // Keeping the small one for footer/hero if needed, but making it cycle too
-  const [currentStoryIdx, setCurrentStoryIdx] = useState(() => Math.floor(Math.random() * STORIES.length));
-  const [lineIdx, setLineIdx] = useState(0);
-  const [cursorVisible, setCursorVisible] = useState(true);
-
-  React.useEffect(() => {
-    const cursorInterval = setInterval(() => setCursorVisible(v => !v), 500);
-    return () => clearInterval(cursorInterval);
-  }, []);
-
-  React.useEffect(() => {
-    const story = STORIES[currentStoryIdx];
-    if (lineIdx < story.length) {
-      const timeout = setTimeout(() => {
-        setLineIdx(prev => prev + 1);
-      }, 1500);
-      return () => clearTimeout(timeout);
-    } else {
-      const timeout = setTimeout(() => {
-        setLineIdx(0);
-        setCurrentStoryIdx(prev => {
-          let next = Math.floor(Math.random() * STORIES.length);
-          if (next === prev && STORIES.length > 1) {
-            next = (next + 1) % STORIES.length;
-          }
-          return next;
-        });
-      }, 4000);
-      return () => clearTimeout(timeout);
-    }
-  }, [lineIdx, currentStoryIdx]);
-
-  const story = STORIES[currentStoryIdx];
-  const displayLines = story.slice(Math.max(0, lineIdx - 4), lineIdx);
-
-  return (
-    <motion.div 
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      className="w-full mx-auto my-12 glass p-6 rounded-2xl font-mono text-sm text-emerald-500/80 text-left shadow-2xl shadow-emerald-500/5 h-48 flex flex-col"
-    >
-      <div className="flex gap-1.5 mb-4">
-        <div className="w-2 h-2 rounded-full bg-red-500/20 border border-red-500/40" />
-        <div className="w-2 h-2 rounded-full bg-amber-500/20 border border-amber-500/40" />
-        <div className="w-2 h-2 rounded-full bg-emerald-500/20 border border-emerald-500/40" />
-      </div>
-      <div className="space-y-1 overflow-hidden">
-        {displayLines.map((line, i) => (
-          <div key={i}>{line}</div>
-        ))}
-        <div className="flex items-center">
-          <span className="mr-1">{">"}</span>
-          <span className={`${cursorVisible ? 'opacity-100' : 'opacity-0'} w-1.5 h-3 bg-emerald-500/60`} />
-        </div>
-      </div>
-    </motion.div>
-  );
-};
+// Terminal component removed as it is now redundant with the sidebar
 
 const StatusBadge = ({ status }: { status: ProjectStatus }) => {
   const colors = {
@@ -672,11 +665,11 @@ export default function App() {
   const explorationProjects = PROJECTS.filter(p => p.status === 'Paused' || p.status === 'Exploration');
 
   return (
-    <div className="min-h-screen mesh-gradient selection:bg-emerald-500/30">
+    <div className="min-h-screen mesh-gradient selection:bg-emerald-500/30 xl:pl-64 transition-all duration-500">
       <MatrixTerminal />
       {/* Navigation */}
-      <nav className="fixed top-0 left-0 right-0 z-50 glass border-t-0 border-x-0">
-        <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+      <nav className="fixed top-0 left-0 right-0 z-50 glass border-t-0 border-x-0 transition-all duration-500">
+        <div className="w-full px-6 h-16 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <div className="w-8 h-8 bg-emerald-500 rounded-lg flex items-center justify-center">
               <FlaskConical className="w-5 h-5 text-slate-950" />
@@ -742,10 +735,10 @@ export default function App() {
             <img 
               src="/src/Kid_coders.png" 
               alt="Pettigrew Lab Team" 
-              className="w-full h-[300px] md:h-[400px] object-cover rounded-xl opacity-80"
+              className="w-full h-auto md:max-h-[600px] object-contain rounded-xl opacity-90"
               referrerPolicy="no-referrer"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-slate-950/40 via-transparent to-transparent pointer-events-none" />
             <div className="absolute bottom-8 left-8 right-8 flex flex-col md:flex-row items-end justify-between gap-4">
               <div className="glass p-4 rounded-xl max-w-xs">
                 <Users className="w-8 h-8 text-emerald-400 mb-3" />
@@ -779,11 +772,6 @@ export default function App() {
                 <ProjectCard project={project} onClick={() => setSelectedProject(project)} />
               </div>
             ))}
-          </div>
-
-          {/* Wider Terminal in the middle */}
-          <div className="mb-12">
-            <Terminal />
           </div>
 
           {/* Exploration Projects */}
