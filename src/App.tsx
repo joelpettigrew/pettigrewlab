@@ -495,7 +495,11 @@ const HinckleyChat = () => {
     setIsLoading(true);
 
     try {
-      const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || '' });
+      const apiKey = process.env.GEMINI_API_KEY;
+      if (!apiKey) {
+        throw new Error("Gemini API key is not configured.");
+      }
+      const ai = new GoogleGenAI({ apiKey });
       
       // Filter out the initial greeting if it's the first message to ensure the conversation starts with 'user'
       const history = messages
@@ -505,15 +509,16 @@ const HinckleyChat = () => {
           parts: [{ text: m.text }]
         }));
 
-      const response = await ai.models.generateContent({
+      const chat = ai.chats.create({
         model: "gemini-3-flash-preview",
-        contents: [...history, { role: 'user', parts: [{ text: userMessage }] }],
+        history: history,
         config: {
           systemInstruction: "You are an AI embodying the personality, voice, and teachings of Gordon B. Hinckley. Your tone is exceptionally optimistic, kind, wise, and encouraging. You use phrases like 'My dear friends', 'Be smart', 'Do your best', and 'It will all work out'. You focus on virtue, hard work, and faith. Keep responses concise but impactful, as if giving a short encouraging message.",
         }
       });
 
-      const aiText = response.text || "I'm sorry, I'm having a bit of trouble connecting right now. But remember, things have a way of working out.";
+      const result = await chat.sendMessage({ message: userMessage });
+      const aiText = result.text || "I'm sorry, I'm having a bit of trouble connecting right now. But remember, things have a way of working out.";
       setMessages(prev => [...prev, { role: 'ai', text: aiText }]);
     } catch (error) {
       console.error("Chat Error:", error);
