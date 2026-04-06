@@ -46,7 +46,7 @@ const PROJECTS: Project[] = [
     icon: <Quote className="w-6 h-6" />,
     url: 'https://chatgpt.com/g/g-699b08b709c4819189144422ea20526e-president-hinkley',
     color: 'blue',
-    image: 'https://images.unsplash.com/photo-1504052434569-70ad5836ab65?auto=format&fit=crop&q=80&w=1000'
+    image: '/Hinckley_hero.png'
   },
   {
     id: 'lawnmowit',
