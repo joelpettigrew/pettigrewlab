@@ -281,6 +281,64 @@ const STORIES = [
     "> dad skill: 0%",
     "> putting away paddles",
     "> offline"
+  ],
+  [
+    "> booting pettigrewlab...",
+    "> loading productivity_module...",
+    "> focus: HIGH",
+    "> coding session: START",
+    "> wait...",
+    "> 'DINNER IS READY!'",
+    "> saving progress... [ABORT]",
+    "> heading to kitchen",
+    "> conversation: ACTIVE",
+    "> discussing school and games",
+    "> cleaning up...",
+    "> gathering for scriptures",
+    "> reading Isaiah...",
+    "> kids confusion: 100%",
+    "> 'what is a besom of destruction?'",
+    "> explaining context...",
+    "> everyone disperses",
+    "> lab time: OVER",
+    "> offline"
+  ],
+  [
+    "> booting pettigrewlab...",
+    "> loading war_room...",
+    "> Clash of Clans: ACTIVE",
+    "> Clan War League: DAY 3",
+    "> checking requests...",
+    "> donating Electro Dragons",
+    "> donating Balloons",
+    "> 'I need troops!'",
+    "> Cassandra donating healers",
+    "> strategy meeting: KITCHEN TABLE",
+    "> 'hit the #4 base'",
+    "> attacking...",
+    "> 3 stars!",
+    "> clan chat: FIRE",
+    "> war won",
+    "> closing app",
+    "> offline"
+  ],
+  [
+    "> booting pettigrewlab...",
+    "> loading creative_studio...",
+    "> ChatGPT: ACTIVE",
+    "> prompt: 'D&D character, half-orc paladin'",
+    "> image generated",
+    "> exporting to MakerOnline...",
+    "> 3D model generated",
+    "> loading Anycubic Slicer...",
+    "> adding supports",
+    "> coloring layers: EMERALD & GOLD",
+    "> slicing...",
+    "> sending to Photon Mono M5s",
+    "> printing: 4 hours remaining",
+    "> first layer: SUCCESS",
+    "> cleaning up resin",
+    "> offline"
   ]
 ];
 
@@ -438,12 +496,18 @@ const HinckleyChat = () => {
 
     try {
       const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || '' });
-      const response = await ai.models.generateContent({
-        model: "gemini-3-flash-preview",
-        contents: [...messages.map(m => ({
+      
+      // Filter out the initial greeting if it's the first message to ensure the conversation starts with 'user'
+      const history = messages
+        .filter((m, i) => i > 0 || m.role === 'user')
+        .map(m => ({
           role: m.role === 'user' ? 'user' : 'model',
           parts: [{ text: m.text }]
-        })), { role: 'user', parts: [{ text: userMessage }] }],
+        }));
+
+      const response = await ai.models.generateContent({
+        model: "gemini-3-flash-preview",
+        contents: [...history, { role: 'user', parts: [{ text: userMessage }] }],
         config: {
           systemInstruction: "You are an AI embodying the personality, voice, and teachings of Gordon B. Hinckley. Your tone is exceptionally optimistic, kind, wise, and encouraging. You use phrases like 'My dear friends', 'Be smart', 'Do your best', and 'It will all work out'. You focus on virtue, hard work, and faith. Keep responses concise but impactful, as if giving a short encouraging message.",
         }
