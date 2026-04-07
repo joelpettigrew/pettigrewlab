@@ -495,7 +495,17 @@ const HinckleyChat = () => {
     setIsLoading(true);
 
     try {
-      const apiKey = process.env.GEMINI_API_KEY;
+      let apiKey = process.env.GEMINI_API_KEY;
+      if (!apiKey) {
+        try {
+          const res = await fetch('/api/config');
+          const data = await res.json();
+          apiKey = data.apiKey;
+        } catch (e) {
+          console.error("Failed to fetch config", e);
+        }
+      }
+      
       if (!apiKey) {
         throw new Error("Gemini API key is not configured.");
       }
@@ -871,7 +881,7 @@ export default function App() {
           </div>
           <h2 className="text-2xl md:text-3xl font-display font-bold mb-4">The Monthly Mission</h2>
           <p className="text-lg text-slate-400 leading-relaxed mb-10">
-            "We believe the best way to learn is to ship. Every 30 days, we take an idea from concept to a working product. No bloat, no endless planning—just code, design, and deployment."
+            "We learn by building and shipping. Every 30 days, we take an idea from zero to something real and live. What’s the value? Can we build it? What should it look like? Could it make money... and does that even matter? Then we decide: keep going or move on to the next idea."
           </p>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-left">
             <div className="glass p-5 rounded-xl">
