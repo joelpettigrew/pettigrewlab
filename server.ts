@@ -7,8 +7,8 @@ async function startServer() {
   const PORT = 3000;
 
   // API routes FIRST
-  app.get("/api/config", (req, res) => {
-    res.json({ apiKey: process.env.GEMINI_API_KEY || '' });
+  app.get("/api/health", (req, res) => {
+    res.json({ status: "ok" });
   });
 
   // Vite middleware for development

@@ -21,7 +21,6 @@ import {
   Loader2,
   Wrench
 } from 'lucide-react';
-import { GoogleGenAI } from "@google/genai";
 
 // --- Types ---
 type ProjectStatus = 'Live Beta' | 'In Development' | 'Paused' | 'Exploration';
@@ -114,7 +113,7 @@ const PROJECTS: Project[] = [
     id: 'allowance',
     title: 'Allowance Investor',
     description: 'A kid-friendly investing platform to learn financial literacy by doing.',
-    status: 'In Development',
+    status: 'Exploration',
     icon: <TrendingUp className="w-6 h-6" />,
     color: 'lime'
   }
@@ -483,120 +482,6 @@ const ProjectCard = ({ project, onClick }: { project: Project; onClick: () => vo
   );
 };
 
-const HinckleyChat = () => {
-  const [messages, setMessages] = useState<{ role: 'user' | 'ai'; text: string }[]>([
-    { role: 'ai', text: "My dear friend, it is a pleasure to visit with you. How can I help you find a bit more optimism or direction today?" }
-  ]);
-  const [input, setInput] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const scrollRef = React.useRef<HTMLDivElement>(null);
-
-  React.useEffect(() => {
-    if (scrollRef.current) {
-      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
-    }
-  }, [messages]);
-
-  const handleSend = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!input.trim() || isLoading) return;
-
-    const userMessage = input.trim();
-    setInput('');
-    setMessages(prev => [...prev, { role: 'user', text: userMessage }]);
-    setIsLoading(true);
-
-    try {
-      let apiKey = process.env.GEMINI_API_KEY;
-      if (!apiKey) {
-        try {
-          const res = await fetch('/api/config');
-          const data = await res.json();
-          apiKey = data.apiKey;
-        } catch (e) {
-          console.error("Failed to fetch config", e);
-        }
-      }
-      
-      if (!apiKey) {
-        throw new Error("Gemini API key is not configured.");
-      }
-      const ai = new GoogleGenAI({ apiKey });
-      
-      // Filter out the initial greeting if it's the first message to ensure the conversation starts with 'user'
-      const history = messages
-        .filter((m, i) => i > 0 || m.role === 'user')
-        .map(m => ({
-          role: m.role === 'user' ? 'user' : 'model',
-          parts: [{ text: m.text }]
-        }));
-
-      const chat = ai.chats.create({
-        model: "gemini-3-flash-preview",
-        history: history,
-        config: {
-          systemInstruction: "You are an AI embodying the personality, voice, and teachings of Gordon B. Hinckley. Your tone is exceptionally optimistic, kind, wise, and encouraging. You use phrases like 'My dear friends', 'Be smart', 'Do your best', and 'It will all work out'. You focus on virtue, hard work, and faith. Keep responses concise but impactful, as if giving a short encouraging message.",
-        }
-      });
-
-      const result = await chat.sendMessage({ message: userMessage });
-      const aiText = result.text || "I'm sorry, I'm having a bit of trouble connecting right now. But remember, things have a way of working out.";
-      setMessages(prev => [...prev, { role: 'ai', text: aiText }]);
-    } catch (error) {
-      console.error("Chat Error:", error);
-      setMessages(prev => [...prev, { role: 'ai', text: "I seem to be experiencing a technical difficulty. But don't let that dampen your spirits!" }]);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  return (
-    <div className="flex flex-col h-[400px] bg-slate-900/50 rounded-2xl border border-white/10 overflow-hidden">
-      <div ref={scrollRef} className="flex-grow overflow-y-auto p-4 space-y-4 scrollbar-hide">
-        {messages.map((m, i) => (
-          <motion.div
-            key={i}
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}
-          >
-            <div className={`max-w-[80%] p-3 rounded-2xl text-sm ${
-              m.role === 'user' 
-                ? 'bg-emerald-500 text-slate-950 font-medium rounded-tr-none' 
-                : 'bg-white/10 text-slate-200 rounded-tl-none border border-white/5'
-            }`}>
-              {m.text}
-            </div>
-          </motion.div>
-        ))}
-        {isLoading && (
-          <div className="flex justify-start">
-            <div className="bg-white/10 p-3 rounded-2xl rounded-tl-none border border-white/5">
-              <Loader2 className="w-4 h-4 animate-spin text-emerald-400" />
-            </div>
-          </div>
-        )}
-      </div>
-      <form onSubmit={handleSend} className="p-4 border-t border-white/10 bg-slate-950/30 flex gap-2">
-        <input
-          type="text"
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          placeholder="Ask President Hinckley..."
-          className="flex-grow bg-white/5 border border-white/10 rounded-xl px-4 py-2 text-sm focus:outline-none focus:border-emerald-500/50 transition-all"
-        />
-        <button 
-          type="submit"
-          disabled={isLoading}
-          className="p-2 bg-emerald-500 text-slate-950 rounded-xl hover:bg-emerald-400 transition-all disabled:opacity-50"
-        >
-          <Send className="w-4 h-4" />
-        </button>
-      </form>
-    </div>
-  );
-};
-
 const ProjectModal = ({ project, onClose }: { project: Project; onClose: () => void }) => {
   return (
     <motion.div
@@ -635,21 +520,15 @@ const ProjectModal = ({ project, onClose }: { project: Project; onClose: () => v
             {project.description}
           </p>
 
-          {project.id === 'hinckley-gpt' ? (
-            <div className="mb-8">
-              <HinckleyChat />
+          {project.image && (
+            <div className="rounded-2xl overflow-hidden border border-white/10 mb-8 shadow-2xl">
+              <img 
+                src={project.image} 
+                alt={project.title} 
+                className="w-full h-auto object-cover"
+                referrerPolicy="no-referrer"
+              />
             </div>
-          ) : (
-            project.image && (
-              <div className="rounded-2xl overflow-hidden border border-white/10 mb-8 shadow-2xl">
-                <img 
-                  src={project.image} 
-                  alt={project.title} 
-                  className="w-full h-auto object-cover"
-                  referrerPolicy="no-referrer"
-                />
-              </div>
-            )
           )}
 
           <div className="flex flex-wrap gap-4">
@@ -660,7 +539,7 @@ const ProjectModal = ({ project, onClose }: { project: Project; onClose: () => v
                 rel="noopener noreferrer"
                 className="px-8 py-4 bg-emerald-500 text-slate-950 font-bold rounded-xl hover:bg-emerald-400 transition-all flex items-center gap-2"
               >
-                Visit Live Site <ExternalLink className="w-4 h-4" />
+                {project.id === 'hinckley-gpt' ? 'Open President Hinckley AI' : 'Visit Live Site'} <ExternalLink className="w-4 h-4" />
               </a>
             )}
             <button 
@@ -850,9 +729,15 @@ export default function App() {
               <p className="text-slate-400 text-sm max-w-xl">From lawn care OS to gamified education, we explore diverse domains with a single focus: shipping value.</p>
             </div>
             <div className="flex gap-2">
-              <div className="px-3 py-1.5 glass rounded-lg text-[10px] font-bold text-emerald-400">2 Live</div>
-              <div className="px-3 py-1.5 glass rounded-lg text-[10px] font-bold text-indigo-400">1 Building</div>
-              <div className="px-3 py-1.5 glass rounded-lg text-[10px] font-bold text-slate-400">5 Exploring</div>
+              <div className="px-3 py-1.5 glass rounded-lg text-[10px] font-bold text-emerald-400">
+                {PROJECTS.filter(p => p.status === 'Live Beta').length} Live
+              </div>
+              <div className="px-3 py-1.5 glass rounded-lg text-[10px] font-bold text-indigo-400">
+                {PROJECTS.filter(p => p.status === 'In Development').length} Building
+              </div>
+              <div className="px-3 py-1.5 glass rounded-lg text-[10px] font-bold text-slate-400">
+                {PROJECTS.filter(p => p.status === 'Exploration' || p.status === 'Paused').length} Exploring
+              </div>
             </div>
           </div>
 
