@@ -18,7 +18,8 @@ import {
   ExternalLink,
   MessageSquare,
   Quote,
-  Loader2
+  Loader2,
+  Wrench
 } from 'lucide-react';
 import { GoogleGenAI } from "@google/genai";
 
@@ -62,17 +63,28 @@ const PROJECTS: Project[] = [
     id: 'studyquest',
     title: 'StudyQuest360',
     description: 'Turn homework into a game with learning plans and concept-based progress tracking.',
-    status: 'In Development',
+    status: 'Live Beta',
     icon: <BookOpen className="w-6 h-6" />,
-    color: 'indigo'
+    url: 'https://studyquest360.com',
+    color: 'indigo',
+    image: '/StudyQuest360.png'
   },
   {
     id: 'driver360',
     title: 'Driver360Feedback',
     description: 'Community-driven feedback on driving behavior to promote safer roads.',
-    status: 'Paused',
+    status: 'In Development',
     icon: <Car className="w-6 h-6" />,
     color: 'slate'
+  },
+  {
+    id: 'homeservicesit',
+    title: 'HomeServicesIT',
+    description: 'The OS for home service pros. Scheduling and routing for electricians, contractors, and plumbers.',
+    status: 'In Development',
+    icon: <Wrench className="w-6 h-6" />,
+    url: 'https://homeservicesit.com',
+    color: 'blue'
   },
   {
     id: 'medmanager',
@@ -102,7 +114,7 @@ const PROJECTS: Project[] = [
     id: 'allowance',
     title: 'Allowance Investor',
     description: 'A kid-friendly investing platform to learn financial literacy by doing.',
-    status: 'Exploration',
+    status: 'In Development',
     icon: <TrendingUp className="w-6 h-6" />,
     color: 'lime'
   }
@@ -847,7 +859,7 @@ export default function App() {
           {/* Active Projects */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mb-12">
             {activeProjects.map((project) => (
-              <div key={project.id}>
+              <div key={project.id} className="h-full">
                 <ProjectCard project={project} onClick={() => setSelectedProject(project)} />
               </div>
             ))}
@@ -856,7 +868,7 @@ export default function App() {
           {/* Exploration Projects */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
             {explorationProjects.map((project) => (
-              <div key={project.id}>
+              <div key={project.id} className="h-full">
                 <ProjectCard project={project} onClick={() => setSelectedProject(project)} />
               </div>
             ))}
@@ -883,21 +895,26 @@ export default function App() {
           <p className="text-lg text-slate-400 leading-relaxed mb-10">
             "We learn by building and shipping. Every 30 days, we take an idea from zero to something real and live. What’s the value? Can we build it? What should it look like? Could it make money... and does that even matter? Then we decide: keep going or move on to the next idea."
           </p>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-left">
-            <div className="glass p-5 rounded-xl">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 text-left">
+            <div className="glass p-5 rounded-xl flex flex-col h-full">
               <div className="text-xl font-display font-bold text-white mb-1">01</div>
-              <h4 className="font-bold text-sm mb-1">Ideate</h4>
-              <p className="text-xs text-slate-400">Identify a real-world problem that can be solved with a focused tool.</p>
+              <h4 className="font-bold text-sm mb-1 text-emerald-400">Value</h4>
+              <p className="text-xs text-slate-400">What’s the value? Identify a real-world problem that people actually care about.</p>
             </div>
-            <div className="glass p-5 rounded-xl">
+            <div className="glass p-5 rounded-xl flex flex-col h-full">
               <div className="text-xl font-display font-bold text-white mb-1">02</div>
-              <h4 className="font-bold text-sm mb-1">Build</h4>
-              <p className="text-xs text-slate-400">Intense 3-week development cycle focusing on core functionality.</p>
+              <h4 className="font-bold text-sm mb-1 text-indigo-400">Feasibility</h4>
+              <p className="text-xs text-slate-400">Can we build it? Assessing technical constraints and finding the simplest path to ship.</p>
             </div>
-            <div className="glass p-5 rounded-xl">
+            <div className="glass p-5 rounded-xl flex flex-col h-full">
               <div className="text-xl font-display font-bold text-white mb-1">03</div>
-              <h4 className="font-bold text-sm mb-1">Ship</h4>
-              <p className="text-xs text-slate-400">Deploy to production and gather real-world feedback immediately.</p>
+              <h4 className="font-bold text-sm mb-1 text-amber-400">Usability</h4>
+              <p className="text-xs text-slate-400">What should it look like? Designing an interface that is intuitive and delightful to use.</p>
+            </div>
+            <div className="glass p-5 rounded-xl flex flex-col h-full">
+              <div className="text-xl font-display font-bold text-white mb-1">04</div>
+              <h4 className="font-bold text-sm mb-1 text-rose-400">Viability</h4>
+              <p className="text-xs text-slate-400">Could it make money... and does that even matter? Deciding if it's a business or a joy.</p>
             </div>
           </div>
         </div>
