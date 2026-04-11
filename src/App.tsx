@@ -23,7 +23,7 @@ import {
 } from 'lucide-react';
 
 // --- Types ---
-type ProjectStatus = 'Live Beta' | 'In Development' | 'Paused' | 'Exploration';
+type ProjectStatus = 'Live Beta' | 'In Development' | 'Paused' | 'Exploration' | 'Production';
 
 interface Project {
   id: string;
@@ -42,7 +42,7 @@ const PROJECTS: Project[] = [
     id: 'hinckley-gpt',
     title: 'President Hinckley AI',
     description: 'A conversational AI trained on the teachings, optimism, and distinct voice of Gordon B. Hinckley.',
-    status: 'Live Beta',
+    status: 'Production',
     icon: <Quote className="w-6 h-6" />,
     url: 'https://chatgpt.com/g/g-699b08b709c4819189144422ea20526e-president-hinkley',
     color: 'blue',
@@ -69,6 +69,16 @@ const PROJECTS: Project[] = [
     image: '/StudyQuest360.png'
   },
   {
+    id: 'homeservicesit',
+    title: 'HomeServicesIT',
+    description: 'The OS for home service pros. Scheduling and routing for electricians, contractors, and plumbers.',
+    status: 'Live Beta',
+    icon: <Wrench className="w-6 h-6" />,
+    url: 'https://homeservicesit.com',
+    color: 'blue',
+    image: '/HomeServicesIT.png'
+  },
+  {
     id: 'driver360',
     title: 'Driver360Feedback',
     description: 'Community-driven feedback on driving behavior to promote safer roads.',
@@ -77,13 +87,12 @@ const PROJECTS: Project[] = [
     color: 'slate'
   },
   {
-    id: 'homeservicesit',
-    title: 'HomeServicesIT',
-    description: 'The OS for home service pros. Scheduling and routing for electricians, contractors, and plumbers.',
+    id: 'teenjob',
+    title: 'Teen Job Finder',
+    description: 'Helping teenagers find local jobs and build real-world work experience.',
     status: 'In Development',
-    icon: <Wrench className="w-6 h-6" />,
-    url: 'https://homeservicesit.com',
-    color: 'blue'
+    icon: <Briefcase className="w-6 h-6" />,
+    color: 'amber'
   },
   {
     id: 'medmanager',
@@ -92,14 +101,6 @@ const PROJECTS: Project[] = [
     status: 'Exploration',
     icon: <Pill className="w-6 h-6" />,
     color: 'rose'
-  },
-  {
-    id: 'teenjob',
-    title: 'Teen Job Finder',
-    description: 'Helping teenagers find local jobs and build real-world work experience.',
-    status: 'Exploration',
-    icon: <Briefcase className="w-6 h-6" />,
-    color: 'amber'
   },
   {
     id: 'healthos',
@@ -420,6 +421,7 @@ const MatrixTerminal = () => {
 
 const StatusBadge = ({ status }: { status: ProjectStatus }) => {
   const colors = {
+    'Production': 'bg-blue-500/10 text-blue-400 border-blue-500/20',
     'Live Beta': 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20',
     'In Development': 'bg-indigo-500/10 text-indigo-400 border-indigo-500/20',
     'Paused': 'bg-slate-500/10 text-slate-400 border-slate-500/20',
@@ -631,7 +633,7 @@ export default function App() {
     }
   };
 
-  const activeProjects = PROJECTS.filter(p => p.status === 'Live Beta' || p.status === 'In Development');
+  const activeProjects = PROJECTS.filter(p => p.status === 'Production' || p.status === 'Live Beta' || p.status === 'In Development');
   const explorationProjects = PROJECTS.filter(p => p.status === 'Paused' || p.status === 'Exploration');
 
   return (
@@ -729,8 +731,11 @@ export default function App() {
               <p className="text-slate-400 text-sm max-w-xl">From lawn care OS to gamified education, we explore diverse domains with a single focus: shipping value.</p>
             </div>
             <div className="flex gap-2">
+              <div className="px-3 py-1.5 glass rounded-lg text-[10px] font-bold text-blue-400">
+                {PROJECTS.filter(p => p.status === 'Production').length} Production
+              </div>
               <div className="px-3 py-1.5 glass rounded-lg text-[10px] font-bold text-emerald-400">
-                {PROJECTS.filter(p => p.status === 'Live Beta').length} Live
+                {PROJECTS.filter(p => p.status === 'Live Beta').length} Beta
               </div>
               <div className="px-3 py-1.5 glass rounded-lg text-[10px] font-bold text-indigo-400">
                 {PROJECTS.filter(p => p.status === 'In Development').length} Building
